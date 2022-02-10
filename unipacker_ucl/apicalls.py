@@ -8,8 +8,8 @@ import pefile
 from colorama import Fore
 from unicorn.x86_const import UC_X86_REG_EAX
 
-from unipacker.kernel_structs import _FILETIME
-from unipacker.utils import align, merge, remove_range, print_cols, get_string, calc_processid, \
+from unipacker_ucl.kernel_structs import _FILETIME
+from unipacker_ucl.utils import align, merge, remove_range, print_cols, get_string, calc_processid, \
     calc_threadid
 
 apicall_mapping = {}
@@ -332,7 +332,7 @@ class WinApiCalls(object):
     @api_call()
     def GetModuleFileNameA(self, uc, esp, log, handle, path_buf, buf_size):
         if not handle:
-            path = "C:/Users/unipacker/hxp.exe"
+            path = "C:/Users/unipacker_ucl/hxp.exe"
         else:
             try:
                 module_name = self.module_handles[handle]

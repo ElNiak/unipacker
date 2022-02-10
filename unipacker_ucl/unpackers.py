@@ -3,11 +3,11 @@ import sys
 
 import yara
 
-import unipacker
-from unipacker.imagedump import ImageDump, ImportRebuilderDump, PEtiteDump, MEWDump, YZPackDump
-from unipacker.utils import InvalidPEFile
+import unipacker_ucl
+from unipacker_ucl.imagedump import ImageDump, ImportRebuilderDump, PEtiteDump, MEWDump, YZPackDump
+from unipacker_ucl.utils import InvalidPEFile
 
-DEFAULT_YARA_PATH = f"{os.path.dirname(unipacker.__file__)}/packer_signatures.yar"
+DEFAULT_YARA_PATH = f"{os.path.dirname(unipacker_ucl.__file__)}/packer_signatures.yar"
 
 
 class DefaultUnpacker(object):

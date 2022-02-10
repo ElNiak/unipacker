@@ -9,8 +9,8 @@ from unittest import TestCase
 
 from colorama import Fore
 
-from unipacker.core import Sample, SimpleClient, UnpackerEngine
-from unipacker.utils import RepeatedTimer
+from unipacker_ucl.core import Sample, SimpleClient, UnpackerEngine
+from unipacker_ucl.utils import RepeatedTimer
 
 
 def calc_md5(sample):

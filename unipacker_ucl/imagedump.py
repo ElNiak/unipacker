@@ -5,15 +5,15 @@ import sys
 import pefile
 from unicorn.x86_const import *
 
-from unipacker.headers import PE, pe_write
-from unipacker.pe_structs import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, \
+from unipacker_ucl.headers import PE, pe_write
+from unipacker_ucl.pe_structs import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, \
     IMAGE_SECTION_HEADER, IMAGE_IMPORT_DESCRIPTOR
-from unipacker.utils import alignments, InvalidPEFile, convert_to_string, print_addr_list, print_chunks
+from unipacker_ucl.utils import alignments, InvalidPEFile, convert_to_string, print_addr_list, print_chunks
 
 
 class ImageDump(object):
 
-    brokenimport_dump_file = ".unipacker_brokenimport.exe"
+    brokenimport_dump_file = ".unipacker_ucl_brokenimport.exe"
 
     def fix_section(self, section, next_section_vaddr):
         # sec_name = section.Name.decode().strip("\x00")

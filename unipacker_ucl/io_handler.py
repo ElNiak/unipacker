@@ -3,9 +3,9 @@ import shutil
 import sys
 import threading
 
-from unipacker.core import UnpackerEngine, SimpleClient
-from unipacker.unpackers import get_unpacker
-from unipacker.utils import RepeatedTimer
+from unipacker_ucl.core import UnpackerEngine, SimpleClient
+from unipacker_ucl.unpackers import get_unpacker
+from unipacker_ucl.utils import RepeatedTimer
 
 
 class IOHandler(object):

@@ -16,13 +16,13 @@ from colorama import Fore
 from unicorn.x86_const import UC_X86_REG_ESP, UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX, \
     UC_X86_REG_EIP, UC_X86_REG_EFLAGS, UC_X86_REG_EDI, UC_X86_REG_ESI, UC_X86_REG_EBP
 
-import unipacker
-from unipacker.core import UnpackerClient, UnpackerEngine, Sample
-from unipacker.headers import print_dos_header, print_pe_header, print_opt_header, print_all_headers, \
+import unipacker_ucl
+from unipacker_ucl.core import UnpackerClient, UnpackerEngine, Sample
+from unipacker_ucl.headers import print_dos_header, print_pe_header, print_opt_header, print_all_headers, \
     print_section_table, \
     pe_write
-from unipacker.io_handler import IOHandler
-from unipacker.utils import get_reg_values, get_string, print_cols, merge, remove_range, disass_n
+from unipacker_ucl.io_handler import IOHandler
+from unipacker_ucl.utils import get_reg_values, get_string, print_cols, merge, remove_range, disass_n
 
 _print = builtins.print
 
@@ -35,7 +35,7 @@ def file_or_dir(path):
 
 
 def print_version_and_exit(*args, **kwargs):
-    print(f"Unipacker {unipacker.__VERSION__}")
+    print(f"unipacker_ucl {unipacker_ucl.__VERSION__}")
     raise SystemExit
 
 
@@ -54,7 +54,7 @@ class Shell(Cmd, UnpackerClient):
             self.disassembler.detail = True
             self.shell_event = None
             parser = argparse.ArgumentParser(
-                prog='unipacker',
+                prog='unipacker_ucl',
                 description='Automatic and platform-independent unpacker for Windows binaries based on emulation')
             parser.add_argument('samples', metavar='sample', type=file_or_dir, nargs='*',
                                 help='The path to a sample (or directory containing samples) you want unpacked')
@@ -91,7 +91,7 @@ class Shell(Cmd, UnpackerClient):
                         self.shell_event.wait()
 
         except (EOFError, KeyboardInterrupt):
-            with open(f"{os.path.dirname(unipacker.__file__)}/fortunes") as f:
+            with open(f"{os.path.dirname(unipacker_ucl.__file__)}/fortunes") as f:
                 fortunes = f.read().splitlines()
             print(f"\n{Fore.LIGHTRED_EX}{choice(fortunes)}{Fore.RESET}\n")
             sys.exit(0)
@@ -120,7 +120,7 @@ class Shell(Cmd, UnpackerClient):
 
             self.init_engine()
 
-            with open(f"{os.path.dirname(unipacker.__file__)}/fortunes") as f:
+            with open(f"{os.path.dirname(unipacker_ucl.__file__)}/fortunes") as f:
                 fortunes = f.read().splitlines()
             print(f"\n{Fore.LIGHTRED_EX}{choice(fortunes)}{Fore.RESET}\n")
             self.cmdloop()
@@ -168,11 +168,11 @@ class Shell(Cmd, UnpackerClient):
                 continue
 
     def init_banner_and_history(self):
-        with open(f"{os.path.dirname(unipacker.__file__)}/banner") as f:
+        with open(f"{os.path.dirname(unipacker_ucl.__file__)}/banner") as f:
             lines = f.read().splitlines()
             width = len(max(lines, key=builtins.len))
             lines = list(map(lambda l: l.ljust(width), lines))
-            version_str = "v" + unipacker.__VERSION__
+            version_str = "v" + unipacker_ucl.__VERSION__
             lines[0] = lines[0][:-len(version_str)] + version_str
             print('\n'.join(lines))
         if not os.path.exists(self.histfile):
@@ -757,7 +757,7 @@ details on this representation)"""
         if not args:
             if not self.rules:
                 try:
-                    self.rules = yara.compile(filepath=f"{os.path.dirname(unipacker.__file__)}/malwrsig.yar")
+                    self.rules = yara.compile(filepath=f"{os.path.dirname(unipacker_ucl.__file__)}/malwrsig.yar")
                     print("Default rules file used: malwrsig.yar")
                 except:
                     print(f"{Fore.LIGHTRED_EX}Error: malwrsig.yar not found!{Fore.RESET}")
@@ -773,7 +773,7 @@ details on this representation)"""
             self.shell_event.clear()
             self.engine.stop()
             self.shell_event.wait()
-        with open(f"{os.path.dirname(unipacker.__file__)}/fortunes") as f:
+        with open(f"{os.path.dirname(unipacker_ucl.__file__)}/fortunes") as f:
             fortunes = f.read().splitlines()
         print(f"\n{Fore.LIGHTRED_EX}{choice(fortunes)}{Fore.RESET}")
         self.exit_code = 0

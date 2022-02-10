@@ -7,13 +7,13 @@ from datetime import datetime
 from colorama import Fore
 from unicorn import UcError
 
-from unipacker.pe_structs import (_IMAGE_DATA_DIRECTORY, _IMAGE_DOS_HEADER,
+from unipacker_ucl.pe_structs import (_IMAGE_DATA_DIRECTORY, _IMAGE_DOS_HEADER,
                                   _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER,
                                   IMAGE_IMPORT_DESCRIPTOR,
                                   IMAGE_SECTION_HEADER, DataDirectory,
                                   DosHeader, ImportDescriptor, OptionalHeader,
                                   PEHeader, SectionHeader)
-from unipacker.utils import ImportValues, InvalidPEFile, get_string
+from unipacker_ucl.utils import ImportValues, InvalidPEFile, get_string
 
 header_sizes = {
     "_IMAGE_DOS_HEADER": len(bytes(_IMAGE_DOS_HEADER())),  # 0x40

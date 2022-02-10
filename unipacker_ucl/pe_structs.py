@@ -1,6 +1,6 @@
 from ctypes import *
 
-from unipacker.utils import convert_to_string
+from unipacker_ucl.utils import convert_to_string
 
 
 class _IMAGE_DATA_DIRECTORY(Structure):

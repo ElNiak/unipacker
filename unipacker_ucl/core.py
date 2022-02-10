@@ -11,13 +11,13 @@ from colorama import Fore
 from unicorn import *
 from unicorn.x86_const import *
 
-import unipacker
-from unipacker.apicalls import WinApiCalls
-from unipacker.headers import PE, get_disk_headers, conv_to_class_header, parse_disk_to_header
-from unipacker.kernel_structs import TEB, PEB, PEB_LDR_DATA, LIST_ENTRY
-from unipacker.pe_structs import SectionHeader, IMAGE_SECTION_HEADER, ImportDescriptor, Import
-from unipacker.unpackers import get_unpacker, DEFAULT_YARA_PATH
-from unipacker.utils import merge, align, convert_to_string, InvalidPEFile, print_single_disass
+import unipacker_ucl
+from unipacker_ucl.apicalls import WinApiCalls
+from unipacker_ucl.headers import PE, get_disk_headers, conv_to_class_header, parse_disk_to_header
+from unipacker_ucl.kernel_structs import TEB, PEB, PEB_LDR_DATA, LIST_ENTRY
+from unipacker_ucl.pe_structs import SectionHeader, IMAGE_SECTION_HEADER, ImportDescriptor, Import
+from unipacker_ucl.unpackers import get_unpacker, DEFAULT_YARA_PATH
+from unipacker_ucl.utils import merge, align, convert_to_string, InvalidPEFile, print_single_disass
 
 
 class Sample(object):
@@ -121,7 +121,7 @@ class UnpackerEngine(object):
         self.sample = sample
         self.unpack_path = unpack_path
         dumper = sample.unpacker.dumper.brokenimport_dump_file = unpack_path + \
-            ".unipacker_brokenimport.tmp"
+            ".unipacker_ucl_brokenimport.tmp"
         self.clients = []
 
         self.emulator_event = threading.Event()
@@ -394,16 +394,16 @@ class UnpackerEngine(object):
 
     def load_dll(self, path_dll, start_addr):
         filename = os.path.splitext(os.path.basename(path_dll))[0]
-        if not os.path.exists(f"{os.path.dirname(unipacker.__file__)}/DLLs/{filename}.ldll"):
+        if not os.path.exists(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/{filename}.ldll"):
             with open(path_dll, "rb") as f:
                 dll = pefile.PE(data=f.read())
             loaded_dll = dll.get_memory_mapped_image(ImageBase=start_addr)
-            with open(f"{os.path.dirname(unipacker.__file__)}/DLLs/{filename}.ldll", 'wb') as f:
+            with open(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/{filename}.ldll", 'wb') as f:
                 f.write(loaded_dll)
             self.uc.mem_map(start_addr, align(len(loaded_dll) + 0x1000))
             self.uc.mem_write(start_addr, loaded_dll)
         else:
-            with open(f"{os.path.dirname(unipacker.__file__)}/DLLs/{filename}.ldll", 'rb') as dll:
+            with open(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/{filename}.ldll", 'rb') as dll:
                 loaded_dll = dll.read()
                 self.uc.mem_map(start_addr, align((len(loaded_dll) + 0x1000)))
                 self.uc.mem_write(start_addr, loaded_dll)
@@ -448,9 +448,9 @@ class UnpackerEngine(object):
         self.setup_processinfo()
 
         # Load DLLs
-        self.load_dll(f"{os.path.dirname(unipacker.__file__)}/DLLs/KernelBase.dll", 0x73D00000)
-        self.load_dll(f"{os.path.dirname(unipacker.__file__)}/DLLs/kernel32.dll", 0x755D0000)
-        self.load_dll(f"{os.path.dirname(unipacker.__file__)}/DLLs/ntdll.dll", 0x77400000)
+        self.load_dll(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/KernelBase.dll", 0x73D00000)
+        self.load_dll(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/kernel32.dll", 0x755D0000)
+        self.load_dll(f"{os.path.dirname(unipacker_ucl.__file__)}/DLLs/ntdll.dll", 0x77400000)
 
         # initialize machine registers
         self.uc.mem_map(self.STACK_ADDR, self.STACK_SIZE)
@@ -542,6 +542,6 @@ class UnpackerEngine(object):
 
 
 if __name__ == '__main__':
-    from unipacker.shell import Shell
+    from unipacker_ucl.shell import Shell
 
     Shell()
